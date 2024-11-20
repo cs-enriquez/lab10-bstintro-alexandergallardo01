@@ -5,10 +5,17 @@ using namespace std;
 // Implement the node class we will need for our Binary Search Tree
 class Node {
 	public:
+	int key;
+	Node *right;
+	Node *left;
 		// the Node should contain
 		// 	- an integer "key" that holds the value of the Node
 		// 	- a pointer to each child possible child node ("right" and "left")
-
+    Node(int n = 0){
+    key = n;
+	right = nullptr;
+	left = nullptr;
+	}
 
 		// Write a constructor for the Node
 		// input: only an integer value for "key", no pointer arguments
@@ -20,26 +27,33 @@ class Node {
 // Use this function to create a Binary Search Tree (BST) tree with the following values
 // {13, 0, 7, 6, 21, 15, -2, 12, 99, 18, 19, -1}
 Node* createTree() {
-	// root
-	Node *root = nullptr;
+	Node* root = new Node(13);
 
-	// level 1 (children of root)
+    // Insert nodes while maintaining BST properties
+    int values[] = {0, 7, 6, 21, 15, -2, 12, 99, 18, 19, -1};
 
-	// level 2 (children of 0)
+    for (int value : values) {
+        Node* current = root;
+        while (true) {
+            if (value < current->value) {
+                if (current->left == nullptr) {
+                    current->left = new Node(value);
+                    break;
+                } else {
+                    current = current->left;
+                }
+            } else {
+                if (current->right == nullptr) {
+                    current->right = new Node(value);
+                    break;
+                } else {
+                    current = current->right;
+                }
+            }
+        }
+    }
 
-	// level 2 (children of 21)
-
-	// level 3 (children of -2)
-
-	// level 3 (children of 7)
-
-	// level 3 (children of 15)
-
-	// level 3 (children of 99)
-
-	// level 4 (children of 18)
-
-	return root;
+    return root;
 }
 
 // Write a function that will search the BST for a target value
@@ -48,11 +62,21 @@ Node* createTree() {
 // 	returns: true or false depending on if the value is found
 // You should write this function recursively! What is the base case? What is the general case?
 bool searchTree(int target, Node* root) {
-	// Base cases
-	return false;
+	TreeNode*current = root;
+if(current == nullptr){
+        return false;
+    }
+if(root->key == target){
+	return true;
+}
 
-	// General case
-	return false;
+if(root->key < target){
+return searchTree(target, root->right);
+}
+if(root->key > target){
+return searchTree(target, root->left);
+}
+
 	
 }
 
@@ -61,19 +85,26 @@ bool searchTree(int target, Node* root) {
 // 	returns: number of nodes currently in the tree
 // You should write this function recursively!
 int treeSize(Node* root) {
-	// base case
-	return -1;
-
-	// General case
-	return -1;
+    if(root == nullptr){
+        return;
+    }
+    else{
+     return 1 + treeSize(root->left) + treeSize(root->right);   
+}
+    }
 
 }
 
 // BONUS! Write a function that will determine the height of the tree
 int treeHeight(Node* root) {
-	// base case
-	return -1;
+	 if (root == nullptr) {
+        return -1; // Conventionally, height of an empty tree is -1
+    }
 
-	// General case
-	return -1;
+    // General case: Height is 1 + maximum of left and right subtree heights
+    int leftHeight = treeHeight(root->left);
+    int rightHeight = treeHeight(root->right);
+
+    return 1 + std::max(leftHeight, rightHeight);
+}
 }
